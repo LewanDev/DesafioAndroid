@@ -6,12 +6,16 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -29,6 +33,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import coil.compose.rememberAsyncImagePainter
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -36,7 +45,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Content()
+            Scaffold(
+                topBar = {},
+                bottomBar = {}
+            ) { innerPadding ->
+                Box(modifier = Modifier.padding(innerPadding)) {
+                    Content()
+                }
+            }
         }
     }
 }
@@ -50,7 +66,9 @@ fun Content(userViewModel: UserViewModel = hiltViewModel()) {
         userViewModel.getUsers(1)
     }
 
-    Column {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .padding(10.dp)) {
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
@@ -58,21 +76,23 @@ fun Content(userViewModel: UserViewModel = hiltViewModel()) {
                 UserItem(user)
             }
         }
-        Text("Página número $page")
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Button(
-                onClick = { userViewModel.goToPreviousPage() },
-                enabled = page > 1
+        Box(contentAlignment = Alignment.Center) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text("Anterior")
-            }
-            Button(
-                onClick = { userViewModel.goToNextPage() }
-            ) {
-                Text("Siguiente")
+                Button(
+                    onClick = { userViewModel.goToPreviousPage() },
+                    enabled = page > 1
+                ) {
+                    Text("Anterior")
+                }
+                Text("Página $page", textAlign = TextAlign.Center)
+                Button(
+                    onClick = { userViewModel.goToNextPage() }
+                ) {
+                    Text("Siguiente")
+                }
             }
         }
     }
@@ -83,6 +103,7 @@ fun UserItem(user: UserModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(8.dp)
     ) {
         Image(
             painter = rememberAsyncImagePainter(user.picture.thumbnail),
