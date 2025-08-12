@@ -1,15 +1,15 @@
 package com.nmarchelli.desafiotecnico.data.model
 
 
-data class UserModel(
-    val results: List<User>
+data class UserResponse(
+    val results: List<UserModel>
 )
 
-data class User(
+data class UserModel(
     val name: Name,
     val location: Location,
     val email: String,
-    val dateOfBirth: DateOfBirth,
+    val dob: Dob,
     val phone: String,
     val picture: Picture,
     val nat: String
@@ -42,7 +42,7 @@ data class Street(
     val name: String
 )
 
-data class DateOfBirth(
+data class Dob(
     val date: String,
     val age: Int
 )

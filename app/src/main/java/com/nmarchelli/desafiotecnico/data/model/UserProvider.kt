@@ -5,5 +5,5 @@ import javax.inject.Singleton
 
 @Singleton
 class UserProvider @Inject constructor(){
-    var users: List<UserModel> = emptyList()
+    var users: List<UserResponse> = emptyList()
 }
