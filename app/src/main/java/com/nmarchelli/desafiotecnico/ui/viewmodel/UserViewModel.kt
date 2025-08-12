@@ -20,9 +20,23 @@ class UserViewModel @Inject constructor(
     private val _page = MutableStateFlow(1)
     val page: StateFlow<Int> = _page
 
+    private val _selectedNationalities = MutableStateFlow<List<String>>(emptyList())
+    val selectedNationalities: StateFlow<List<String>> = _selectedNationalities
+
+    fun toggleNationality(nat: String) {
+        val current = _selectedNationalities.value.toMutableList()
+        if (current.contains(nat)) {
+            current.remove(nat)
+        } else {
+            current.add(nat)
+        }
+        _selectedNationalities.value = current
+        getUsers(1)
+    }
+
     fun getUsers(page: Int){
         viewModelScope.launch {
-            val response = repository.getTenUsers(page)
+            val response = repository.getTenUsers(page, _selectedNationalities.value)
             if(response.isSuccessful){
                 _users.value = response.body()?.results ?: emptyList()
                 _page.value = page

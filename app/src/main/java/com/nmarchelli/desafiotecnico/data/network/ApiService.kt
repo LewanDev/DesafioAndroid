@@ -13,6 +13,7 @@ interface ApiService {
     suspend fun getTenUsers(
         @Query("page") page: Int,
         @Query("results") results: Int = 10,
-        @Query("seed") seed: String = "challenge"
+        @Query("seed") seed: String = "challenge",
+        @Query("nat") nat: String
     ): Response<UserResponse>
 }
