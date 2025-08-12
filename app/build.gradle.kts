@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -63,11 +64,16 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    kapt("com.google.dagger:dagger-compiler:2.35")
     //dagger hilt
+    kapt("com.google.dagger:dagger-compiler:2.56.2")
     implementation("com.google.dagger:hilt-android:2.56.2")
     kapt("com.google.dagger:hilt-android-compiler:2.56.2")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
+    //coil compose
     implementation("io.coil-kt:coil-compose:2.4.0")
+
+    //navigation compose
+    implementation("androidx.navigation:navigation-compose:2.9.3")
+
 }
