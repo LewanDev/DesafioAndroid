@@ -20,9 +20,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -92,7 +97,9 @@ class MainActivity : ComponentActivity() {
                             UserListScreen(navController)
                         }
                         composable(userDetail) {
-                            UserDetailScreen(navController)
+                            UserDetailScreen(
+                                navController = navController,
+                            )
                         }
                     }
                 }
@@ -109,38 +116,61 @@ fun UserListScreen(
     val users by userViewModel.users.collectAsState(initial = emptyList())
     val page by userViewModel.page.collectAsState(initial = 1)
     val selectedNats by userViewModel.selectedNationalities.collectAsState()
+    val favorites by userViewModel.favorites.collectAsState()
 
-    var showDialog by remember { mutableStateOf(false) }
+    var showNationalitiesDialog by remember { mutableStateOf(false) }
+    var showFavoritesDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         userViewModel.getUsers(1)
     }
-    if (showDialog) {
+    if (showNationalitiesDialog) {
         NationalityDialog(
             nationalities = allNationalities,
             selectedNats = selectedNats,
-            onDismissRequest = { showDialog = false }
+            onDismissRequest = { showNationalitiesDialog = false }
         )
     }
+
+    if(showFavoritesDialog){
+        FavoritesDialog(
+            list = favorites,
+            onDismissRequest = { showFavoritesDialog = false}
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp)
     ) {
-        Button(onClick = { showDialog = true }) {
-            Text("Filtrar Nacionalidades")
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Button(onClick = { showNationalitiesDialog = true }) {
+                Text("Filtrar Nacionalidades")
+            }
+            Button(onClick = { showFavoritesDialog = true }) {
+                Text("Ver Favoritos")
+            }
         }
         LazyColumn(
             modifier = Modifier.weight(1f)
         ) {
             items(users) { user ->
-                UserItem(user) {
-                    navController.currentBackStackEntry?.savedStateHandle?.set(
-                        selectedUser,
-                        user
-                    )
-                    navController.navigate(userDetail)
-                }
+                UserItem(
+                    user = user,
+                    isFavorite = favorites.contains(user.email),
+                    onClick = {
+                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                            selectedUser,
+                            user
+                        )
+                        navController.navigate(userDetail)
+                    },
+                    onFavoriteClick = { userViewModel.toggleFavorite(user) }
+                )
             }
         }
         Box(contentAlignment = Alignment.Center) {
@@ -166,7 +196,9 @@ fun UserListScreen(
 }
 
 @Composable
-fun UserDetailScreen(navController: NavController) {
+fun UserDetailScreen(
+    navController: NavController,
+) {
     val user = navController.previousBackStackEntry?.savedStateHandle?.get<UserModel>(selectedUser)
 
     if (user == null) {
@@ -213,7 +245,12 @@ fun UserDetailScreen(navController: NavController) {
 }
 
 @Composable
-fun UserItem(user: UserModel, onClick: () -> Unit) {
+fun UserItem(
+    user: UserModel,
+    onClick: () -> Unit,
+    isFavorite: Boolean,
+    onFavoriteClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -233,7 +270,23 @@ fun UserItem(user: UserModel, onClick: () -> Unit) {
             Text(user.email)
             Text("Edad: ${user.dob.age}")
         }
+        Spacer(Modifier.width(8.dp))
+        IconButton(onClick = { onFavoriteClick() }) {
+            Icon(
+                imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                contentDescription = "Agregar a favoritos"
+            )
+        }
     }
+}
+
+@Composable
+fun FavoritesDialog(
+    list: Set<String>,
+    userViewModel: UserViewModel = hiltViewModel(),
+    onDismissRequest: () -> Unit,
+){
+
 }
 
 @Composable

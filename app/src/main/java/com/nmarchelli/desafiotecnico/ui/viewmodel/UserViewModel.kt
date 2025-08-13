@@ -23,6 +23,25 @@ class UserViewModel @Inject constructor(
     private val _selectedNationalities = MutableStateFlow<List<String>>(emptyList())
     val selectedNationalities: StateFlow<List<String>> = _selectedNationalities
 
+    private val _favorites = MutableStateFlow<Set<String>>(emptySet())
+    val favorites: StateFlow<Set<String>> = _favorites
+
+    fun setUsers(list: List<UserModel>) {
+        _users.value = list
+    }
+
+    fun toggleFavorite(user: UserModel) {
+        _favorites.value = if (_favorites.value.contains(user.email)) {
+            _favorites.value - user.email
+        } else {
+            _favorites.value + user.email
+        }
+    }
+
+    fun isFavorite(user: UserModel): Boolean {
+        return _favorites.value.contains(user.email)
+    }
+
     fun toggleNationality(nat: String) {
         val current = _selectedNationalities.value.toMutableList()
         if (current.contains(nat)) {
