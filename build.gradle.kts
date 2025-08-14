@@ -5,4 +5,9 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     kotlin("kapt") version "1.9.22"
     id("com.google.dagger.hilt.android") version "2.56.2" apply false
+    kotlin("jvm") version "2.2.0"
+}
+
+tasks.test {
+    useJUnitPlatform()
 }

@@ -49,7 +49,7 @@ class UserViewModel @Inject constructor(
 
     fun getUsers(page: Int){
         viewModelScope.launch {
-            val response = repository.getTenUsers(page, _selectedNationalities.value)
+            val response = repository.getUsers(page, _selectedNationalities.value)
             if(response.isSuccessful){
                 _users.value = response.body()?.results ?: emptyList()
                 _page.value = page

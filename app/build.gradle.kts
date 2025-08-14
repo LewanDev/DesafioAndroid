@@ -60,6 +60,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    testImplementation("io.mockk:mockk:1.12.2")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:3.2.0")
+    testImplementation(kotlin("test"))
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
@@ -75,4 +80,6 @@ dependencies {
 
     //navigation compose
     implementation("androidx.navigation:navigation-compose:2.9.3")
+    testImplementation(kotlin("test"))
 }
+
