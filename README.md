@@ -3,11 +3,11 @@
 ## Estructura del proyecto
 
 com.nmarchelli.desafiotecnico
-- core (Configuración de Retrofit)
 - data
   - model (Clases de datos)
   - network (API Service con Retrofit)
   - repository (Repositorios)
+- di (Configuración de Retrofit)
 - ui
   - view (Pantallas y Composables)
   - viewmodel (Capa de negocio)
@@ -41,3 +41,4 @@ com.nmarchelli.desafiotecnico
 2. Ejecutar desde Android Studio:
    - Click derecho en la clase de test → Run 'UserRepositoryTest'
    - Se puede usar FakeUserRepository para validar consistencia de datos y favoritos.
+
