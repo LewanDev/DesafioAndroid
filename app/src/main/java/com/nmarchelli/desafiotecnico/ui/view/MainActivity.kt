@@ -132,10 +132,13 @@ fun UserListScreen(
         )
     }
 
-    if(showFavoritesDialog){
+    if (showFavoritesDialog) {
+        val favoriteUsers = users.filter { favorites.contains(it.email) }
+
         FavoritesDialog(
-            list = favorites,
-            onDismissRequest = { showFavoritesDialog = false}
+            list = favoriteUsers,
+            onDismissRequest = { showFavoritesDialog = false },
+            navController = navController
         )
     }
 
@@ -194,6 +197,7 @@ fun UserListScreen(
         }
     }
 }
+
 
 @Composable
 fun UserDetailScreen(
@@ -255,8 +259,8 @@ fun UserItem(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { onClick() }
-    ) {
+            .clickable { onClick() },
+        ) {
         Image(
             painter = rememberAsyncImagePainter(user.picture.thumbnail),
             contentDescription = null,
@@ -270,8 +274,8 @@ fun UserItem(
             Text(user.email)
             Text("Edad: ${user.dob.age}")
         }
-        Spacer(Modifier.width(8.dp))
-        IconButton(onClick = { onFavoriteClick() }) {
+        Spacer(Modifier.weight(1f))
+        IconButton(onClick = { onFavoriteClick() }, modifier = Modifier.size(30.dp)) {
             Icon(
                 imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
                 contentDescription = "Agregar a favoritos"
@@ -282,12 +286,49 @@ fun UserItem(
 
 @Composable
 fun FavoritesDialog(
-    list: Set<String>,
+    list: List<UserModel>,
     userViewModel: UserViewModel = hiltViewModel(),
     onDismissRequest: () -> Unit,
-){
+    navController: NavController,
+) {
+    Dialog(onDismissRequest = onDismissRequest) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(400.dp)
+                .width(600.dp)
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Listado de favoritos")
+                LazyColumn(modifier = Modifier.weight(1f)) {
+                    items(list) { user ->
+                        UserItem(
+                            user = user,
+                            isFavorite = true,
+                            onClick = {
+                                navController.currentBackStackEntry?.savedStateHandle?.set(
+                                    selectedUser, user
+                                )
+                                navController.navigate(userDetail)
+                                onDismissRequest()
+                            },
+                            onFavoriteClick = { userViewModel.toggleFavorite(user) }
+                        )
+                    }
+                }
+            }
+        }
+    }
 
 }
+
 
 @Composable
 fun NationalityDialog(

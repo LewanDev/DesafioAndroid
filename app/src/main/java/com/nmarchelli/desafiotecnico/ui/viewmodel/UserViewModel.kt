@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val repository: UserRepository
+    private val repository: UserRepository,
 ): ViewModel() {
     private val _users = MutableStateFlow<List<UserModel>>(emptyList())
     val users: StateFlow<List<UserModel>> = _users
@@ -26,20 +26,14 @@ class UserViewModel @Inject constructor(
     private val _favorites = MutableStateFlow<Set<String>>(emptySet())
     val favorites: StateFlow<Set<String>> = _favorites
 
-    fun setUsers(list: List<UserModel>) {
-        _users.value = list
-    }
+
 
     fun toggleFavorite(user: UserModel) {
         _favorites.value = if (_favorites.value.contains(user.email)) {
-            _favorites.value - user.email
+            _favorites.value - user.email // quitar
         } else {
-            _favorites.value + user.email
+            _favorites.value + user.email // agregar
         }
-    }
-
-    fun isFavorite(user: UserModel): Boolean {
-        return _favorites.value.contains(user.email)
     }
 
     fun toggleNationality(nat: String) {

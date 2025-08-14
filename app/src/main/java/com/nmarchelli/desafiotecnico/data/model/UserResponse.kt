@@ -3,6 +3,8 @@ package com.nmarchelli.desafiotecnico.data.model
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
+import kotlinx.serialization.Contextual
+import kotlinx.serialization.Serializable
 
 
 data class UserResponse(
@@ -10,6 +12,7 @@ data class UserResponse(
 )
 
 @Parcelize
+@Serializable
 data class UserModel(
     val name: Name,
     val location: Location,
@@ -21,6 +24,7 @@ data class UserModel(
 ): Parcelable
 
 @Parcelize
+@Serializable
 data class Name(
     val title: String,
     val first: String,
@@ -32,12 +36,12 @@ data class Name(
 }
 
 @Parcelize
+@Serializable
 data class Location(
     val street: Street,
     val city: String,
     val state: String,
     val country: String,
-    val postcode: @RawValue Any
 ): Parcelable {
     fun getFullAddress(): String {
         return "${street.number} ${street.name}, $city, $state, $country"
@@ -45,18 +49,21 @@ data class Location(
 }
 
 @Parcelize
+@Serializable
 data class Street(
     val number: Int,
     val name: String
 ): Parcelable
 
 @Parcelize
+@Serializable
 data class Dob(
     val date: String,
     val age: Int
 ): Parcelable
 
 @Parcelize
+@Serializable
 data class Picture(
     val large: String,
     val medium: String,
