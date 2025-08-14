@@ -8,11 +8,17 @@ import kotlinx.serialization.Serializable
 
 
 data class UserResponse(
-    val results: List<UserModel>
+    val results: List<UserModel>,
+    val info: Info
 )
 
+data class Info(
+    val seed: String,
+    val results: Int,
+    val page: Int,
+    val version: String
+)
 @Parcelize
-@Serializable
 data class UserModel(
     val name: Name,
     val location: Location,
@@ -24,7 +30,6 @@ data class UserModel(
 ): Parcelable
 
 @Parcelize
-@Serializable
 data class Name(
     val title: String,
     val first: String,
@@ -36,7 +41,6 @@ data class Name(
 }
 
 @Parcelize
-@Serializable
 data class Location(
     val street: Street,
     val city: String,
@@ -49,21 +53,18 @@ data class Location(
 }
 
 @Parcelize
-@Serializable
 data class Street(
     val number: Int,
     val name: String
 ): Parcelable
 
 @Parcelize
-@Serializable
 data class Dob(
     val date: String,
     val age: Int
 ): Parcelable
 
 @Parcelize
-@Serializable
 data class Picture(
     val large: String,
     val medium: String,

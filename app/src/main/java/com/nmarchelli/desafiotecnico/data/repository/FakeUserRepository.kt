@@ -6,15 +6,20 @@ import com.nmarchelli.desafiotecnico.data.model.Name
 import com.nmarchelli.desafiotecnico.data.model.Picture
 import com.nmarchelli.desafiotecnico.data.model.Street
 import com.nmarchelli.desafiotecnico.data.model.UserModel
+import com.nmarchelli.desafiotecnico.data.model.UserResponse
+import com.nmarchelli.desafiotecnico.data.model.Info
 import kotlinx.coroutines.delay
+import retrofit2.Response
 
-class FakeUserRepository(private val seed: String = "challenge") {
+class FakeUserRepository(
+    private val seed: String = "challenge"
+) : IUserRepository {
 
     private val fixedUsers = listOf(
         UserModel(
-            name = Name("JohnDoeDev","John", "Doe"),
+            name = Name("JohnDoeDev", "John", "Doe"),
             location = Location(
-                street = Street(1,"123 Main St"),
+                street = Street(1, "123 Main St"),
                 city = "City",
                 state = "State",
                 country = "Country",
@@ -30,7 +35,7 @@ class FakeUserRepository(private val seed: String = "challenge") {
             nat = "US"
         ),
         UserModel(
-            name = Name("JaneSmithDev","Jane", "Smith"),
+            name = Name("JaneSmithDev", "Jane", "Smith"),
             location = Location(
                 street = Street(2, "456 Elm St"),
                 city = "City2",
@@ -49,8 +54,21 @@ class FakeUserRepository(private val seed: String = "challenge") {
         )
     )
 
-    suspend fun getUsers(): List<UserModel> {
+    override suspend fun getUsers(page: Int, nat: List<String>): Response<UserResponse> {
         delay(50)
-        return fixedUsers
+
+        val filtered = if (nat.isEmpty()) fixedUsers else fixedUsers.filter { it.nat in nat }
+
+        return Response.success(
+            UserResponse(
+                results = filtered,
+                info = Info(
+                    seed = seed,
+                    results = filtered.size,
+                    page = page,
+                    version = "1.0"
+                )
+            )
+        )
     }
 }

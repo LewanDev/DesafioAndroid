@@ -5,6 +5,10 @@ import com.nmarchelli.desafiotecnico.data.network.ApiService
 import retrofit2.Response
 import javax.inject.Inject
 
+interface IUserRepository {
+    suspend fun getUsers(page: Int, nat: List<String>): Response<UserResponse>
+}
+
 class UserRepository @Inject constructor(
     private val apiService: ApiService
 ) {
