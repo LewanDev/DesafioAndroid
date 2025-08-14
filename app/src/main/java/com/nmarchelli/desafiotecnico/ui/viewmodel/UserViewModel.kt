@@ -2,7 +2,7 @@ package com.nmarchelli.desafiotecnico.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nmarchelli.desafiotecnico.data.UserRepository
+import com.nmarchelli.desafiotecnico.data.repository.UserRepository
 import com.nmarchelli.desafiotecnico.data.model.UserModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,13 +26,11 @@ class UserViewModel @Inject constructor(
     private val _favorites = MutableStateFlow<Set<String>>(emptySet())
     val favorites: StateFlow<Set<String>> = _favorites
 
-
-
     fun toggleFavorite(user: UserModel) {
         _favorites.value = if (_favorites.value.contains(user.email)) {
-            _favorites.value - user.email // quitar
+            _favorites.value - user.email
         } else {
-            _favorites.value + user.email // agregar
+            _favorites.value + user.email
         }
     }
 

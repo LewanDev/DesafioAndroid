@@ -7,9 +7,6 @@ import retrofit2.http.Query
 
 interface ApiService {
     @GET("api")
-    suspend fun getRandomUser():Response<UserResponse>
-
-    @GET("api")
     suspend fun getTenUsers(
         @Query("page") page: Int,
         @Query("results") results: Int = 10,

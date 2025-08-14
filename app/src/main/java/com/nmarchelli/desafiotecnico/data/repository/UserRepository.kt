@@ -1,4 +1,4 @@
-package com.nmarchelli.desafiotecnico.data
+package com.nmarchelli.desafiotecnico.data.repository
 
 import com.nmarchelli.desafiotecnico.data.model.UserResponse
 import com.nmarchelli.desafiotecnico.data.network.ApiService
